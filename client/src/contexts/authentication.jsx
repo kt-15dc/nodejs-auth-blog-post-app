@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = React.createContext();
 
 function AuthProvider(props) {
+  const navigate = useNavigate();
+
   const [state, setState] = useState({
     loading: null,
     error: null,
@@ -13,29 +15,27 @@ function AuthProvider(props) {
   });
 
   const login = async (data) => {
-    
     const result = await axios.post("http://localhost:4000/auth/login", data);
 
     const token = result.data.token;
 
     localStorage.setItem("token", token);
 
+    const userDataFromToken = jwtDecode(token);
 
+    setState({ ...state, user: userDataFromToken });
+
+    navigate("/");
   };
 
-  const navigate = useNavigate();
-
   const register = async (data) => {
-    
-
-  try {
-    await axios.post("http://localhost:4000/auth/register",data); // ✅ attempt to register
-    navigate("/login");   // ✅ navigate on success
-  } catch (error) {
-    console.error("Registration failed:", error); // ✅ handle failure
-    alert("Something went wrong. Please try again.");
-  }
-
+    try {
+      await axios.post("http://localhost:4000/auth/register", data); // ✅ attempt to register
+      navigate("/login"); // ✅ navigate on success
+    } catch (error) {
+      console.error("Registration failed:", error); // ✅ handle failure
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   const logout = () => {
