@@ -3,9 +3,14 @@ import axios from "axios";
 function jwtInterceptor() {
   axios.interceptors.request.use((req) => {
     // 🐨 Todo: Exercise #6
-    //  ให้เขียน Logic ในการแนบ Token เข้าไปใน Header ของ Request
-    // เมื่อมีการส่ง Request จาก Client ไปหา Server
-    // ภายใน Callback Function axios.interceptors.request.use
+
+      const hasToken = Boolean(window.localStorage.getItem("token"));
+
+      if (hasToken) {
+        const token = window.localStorage.getItem("token");
+        req.headers["Authorization"] = `Bearer ${token}`;
+      }
+    
 
     return req;
   });
