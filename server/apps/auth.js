@@ -70,7 +70,5 @@ authRouter.post("/login", async (req, res) => {
     })
 })
 
-// 🐨 Todo: Exercise #3
-// ให้สร้าง API เพื่อเอาไว้ Login ตัว User ตามตารางที่ออกแบบไว้
 
 export default authRouter;
